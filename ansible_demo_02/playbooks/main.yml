@@ -1,0 +1,14 @@
+---
+# This "main.yml" file is a playbook, which one can recognize because:
+# 1. It starts with three dashes up top.
+# 2. Its top-level entries invoke "plays."
+
+# Within the playbook, this "My one and only play" list item invokes a "play," which one can recognize because:
+# 1. It is a top-level list item in this file.
+# 2. It contains a "hosts" property.
+# 3. It contains a "tasks" or "roles" property.
+- name: "My one and only play"
+  hosts: "all"
+  tasks:
+    - ansible.builtin.import_role:
+        name: "katiekodes.ansible_demo_first.helloworld"

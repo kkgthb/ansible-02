@@ -1,0 +1,5 @@
+collections:
+  - name: 'katiekodes.ansible_demo_first'
+    source: 'https://github.com/kkgthb/ansible-01.git#/ansible_demo_01' # Full path to where this is a galaxy.yml file.
+    version: 'main' # Branch name.
+    type: 'git' # Clarifies not to just pull from the public Ansible Galaxy server.

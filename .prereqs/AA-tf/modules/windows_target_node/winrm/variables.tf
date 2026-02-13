@@ -11,6 +11,6 @@ variable "workload_nickname" {
   type = string
 }
 
-variable "current_gh_repo" {
+variable "fqdn" {
   type = string
 }

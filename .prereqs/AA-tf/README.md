@@ -1,1 +1,3 @@
 TODO:  put some Terraform here that spins up one Linux box, and one Windows box, that I can use as "target nodes" / "managed nodes" _(within which I will check the OS version number, etc.)_.  No need to spin up one to serve as a "control node;" I'll just use the version of the Ansible Core CLI built into CI/CD pipeline runtime itself as a "control node."
+
+Note:  I have been a bit lazy, throwing VM admin passwords straight into GitHub Actions secret values.  In the real world, there's no good reason to be writing a `helloworld.txt` file in admin mode out of sheer laziness.  But apparently the Terraform is a bit kludgey to add users with lesser privileges, and I can't be bothered.

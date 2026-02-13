@@ -6,8 +6,5 @@ terraform {
     azapi = {
       source = "Azure/azapi"
     }
-    github = {
-      source = "integrations/github"
-    }
   }
 }

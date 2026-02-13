@@ -6,7 +6,7 @@ resource "azurerm_linux_virtual_machine" "my_vm" {
   size                  = "Standard_DS1_v2"
 
   os_disk {
-    name                 = "myOsDisk"
+    name                 = "myLinOsDisk"
     caching              = "ReadWrite"
     storage_account_type = "Standard_LRS"
   }

@@ -19,15 +19,7 @@ variable "nic_id" {
   type = string
 }
 
-variable "winrm_kv_id" {
-  type = string
-}
-
-variable "winrm_cert_id" {
-  type = string
-}
-
-variable "winrm_cert_url" {
+variable "fqdn" {
   type = string
 }
 

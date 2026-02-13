@@ -8,7 +8,7 @@ resource "azurerm_windows_virtual_machine" "my_vm" {
   location              = var.resource_group.location
   resource_group_name   = var.resource_group.name
   network_interface_ids = [var.nic_id]
-  size                  = "Standard_B1s"
+  size                  = "Standard_DS1_v2"
 
   os_disk {
     name                 = "myWinOsDisk"
@@ -30,33 +30,7 @@ resource "azurerm_windows_virtual_machine" "my_vm" {
   identity {
     type = "SystemAssigned"
   }
-
-  # Note:  This has to be commented out on the first pass of provisioning this resource.
-  # secret {
-  #   key_vault_id = var.winrm_kv_id
-  #   certificate {
-  #     store = "My" # The Windows personal certificate store
-  #     url   = var.winrm_cert_url
-  #   }
-  # }
-
-  # Note:  This has to be commented out on the first pass of provisioning this resource.
-  # No nevermind, dangit, that doesn't work because changing forces a new resource to be created.
-  # winrm_listener {
-  #   protocol        = "Https"
-  #   certificate_url = var.winrm_cert_url
-  # }
 }
-# data "azurerm_virtual_machine" "my_vm_data" {
-#   name                = "${var.workload_nickname}WinVm"
-#   resource_group_name = var.resource_group.name
-# }
-# resource "azurerm_role_assignment" "vm_can_read_cert" {
-#   # We use a "data" resource to force-fail if we forgot to do a 1st round of provisioning the VM w/ parts commented out.
-#   principal_id         = data.azurerm_virtual_machine.my_vm_data.identity[0].principal_id
-#   scope                = var.winrm_cert_id
-#   role_definition_name = "Key Vault Certificate User"
-# }
 
 resource "azurerm_virtual_machine_extension" "my_entra_login_vm_extension" {
   virtual_machine_id   = azurerm_windows_virtual_machine.my_vm.id
@@ -64,6 +38,17 @@ resource "azurerm_virtual_machine_extension" "my_entra_login_vm_extension" {
   name                 = "${var.workload_nickname}AADLoginForWindows"
   type                 = "AADLoginForWindows"
   type_handler_version = "1.0"
+}
+
+data "azurerm_subscription" "current_subscription" {}
+resource "null_resource" "run_local_az_pwsh" {
+  provisioner "local-exec" {
+    working_dir = path.module
+    command     = <<-EOT
+      pwsh -Command "Set-AzContext -SubscriptionId '${data.azurerm_subscription.current_subscription.subscription_id}'"
+      pwsh -Command "Invoke-AzVMRunCommand -ResourceGroupName '${var.resource_group.name}' -VMName '${azurerm_windows_virtual_machine.my_vm.id}' -CommandId 'RunPowerShellScript' -ScriptPath 'winrm.ps1' -Parameter @{'fqdn'='${var.fqdn}'}"
+    EOT
+  }
 }
 
 # resource "azurerm_virtual_machine_extension" "my_winrm_https_vm_extension" {

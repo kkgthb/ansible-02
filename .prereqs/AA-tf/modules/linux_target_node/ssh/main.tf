@@ -19,3 +19,11 @@ resource "azapi_resource_action" "ssh_public_key_gen" {
   response_export_values = ["publicKey", "privateKey"]
 }
 
+resource "github_actions_secret" "gh_scrt_vm_ssh_private_key" {
+  repository      = var.current_gh_repo
+  secret_name     = "THE_LINUX_VM_SSH_PRIVATE_KEY_VALUE"
+  plaintext_value = azapi_resource_action.ssh_public_key_gen.output["privateKey"]
+  # Note:  I'm not sure if plaintext_value would be secure enough for production, but 
+  # this is just throwaway infrastructure I keep destroying between runs anyway, and my 
+  # Terraform state file is secured.
+}

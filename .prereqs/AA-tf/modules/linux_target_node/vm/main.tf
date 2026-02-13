@@ -45,3 +45,9 @@ resource "azurerm_role_assignment" "myself_as_os_user" {
   scope                = azurerm_linux_virtual_machine.my_vm.id
   principal_id         = data.azurerm_client_config.current.object_id
 }
+
+resource "github_actions_secret" "gh_scrt_vm_username" {
+  repository      = var.current_gh_repo
+  secret_name     = "THE_LINUX_VM_USERNAME"
+  plaintext_value = var.username
+}

@@ -10,3 +10,7 @@ variable "resource_group" {
 variable "workload_nickname" {
   type = string
 }
+
+variable "current_gh_repo" {
+  type = string
+}

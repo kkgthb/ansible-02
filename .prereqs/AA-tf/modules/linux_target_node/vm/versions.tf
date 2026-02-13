@@ -3,6 +3,9 @@ terraform {
     azurerm = {
       source = "hashicorp/azurerm"
     }
+    github = {
+      source = "integrations/github"
+    }
   }
 }
 

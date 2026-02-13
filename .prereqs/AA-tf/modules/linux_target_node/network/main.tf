@@ -4,6 +4,14 @@ resource "azurerm_public_ip" "my_public_ip" {
   resource_group_name = var.resource_group.name
   allocation_method   = "Dynamic"
   sku                 = "Basic"
+  domain_name_label   = "${var.workload_nickname}mylnxvmfqdn"
+}
+
+resource "github_actions_secret" "gh_scrt_vm_fqdn" {
+  repository      = var.current_gh_repo
+  secret_name     = "THE_LINUX_VM_FQDN"
+  plaintext_value = azurerm_public_ip.my_public_ip.fqdn
+  depends_on      = [azurerm_public_ip.my_public_ip]
 }
 
 # Create Network Security Group and rule

@@ -1,9 +1,10 @@
-name: "Demo - TODO give it a good name"
+name: "Demo - Run imported Ansible against target managed node(s)"
 
 on:
   push:
     branches:
       - main
+      - temp
 
 jobs:
   job_1:
@@ -18,13 +19,17 @@ jobs:
         run: "${{ github.workspace }}/.cicd_pipeline_helpers/i_only_run_on_posix_not_windows.ps1"
         shell: "pwsh"
         working-directory: "${{ github.workspace }}"
+        env:
+          THE_LINUX_VM_FQDN: ${{ secrets.THE_LINUX_VM_FQDN }}
+          THE_LINUX_VM_USERNAME: ${{ secrets.THE_LINUX_VM_USERNAME }}
+          THE_LINUX_VM_SSH_PRIVATE_KEY_VALUE: ${{ secrets.THE_LINUX_VM_SSH_PRIVATE_KEY_VALUE }}
       - id: "beautify_ansible_results"
         name: "Beautify the Ansible execution results"
         uses: "mikepenz/action-junit-report@v5"
         if: (!cancelled())
         with:
           report_paths: |
-            ${{ github.workspace }}/ansible_demo_01/test-results/junit-results/**/*.xml
+            ${{ github.workspace }}/ansible_demo_02/test-results/junit-results/**/*.xml
           job_summary: true
           detailed_summary: true
           check_annotations: false

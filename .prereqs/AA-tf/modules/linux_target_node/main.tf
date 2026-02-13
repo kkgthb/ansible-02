@@ -4,6 +4,7 @@ module "ssh_keys_demo" {
     id       = var.resource_group.id
     location = var.resource_group.location
   }
+  current_gh_repo = var.current_gh_repo
 }
 
 module "network_demo" {
@@ -14,6 +15,7 @@ module "network_demo" {
     location = var.resource_group.location
   }
   workload_nickname = var.workload_nickname
+  current_gh_repo   = var.current_gh_repo
 }
 
 module "vm_demo" {
@@ -27,4 +29,5 @@ module "vm_demo" {
   username                         = "foobar"
   azapi_resource_action_public_key = module.ssh_keys_demo.key_data
   workload_nickname                = var.workload_nickname
+  current_gh_repo                  = var.current_gh_repo
 }

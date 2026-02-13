@@ -5,3 +5,7 @@ variable "resource_group" {
     location = string
   })
 }
+
+variable "current_gh_repo" {
+  type = string
+}

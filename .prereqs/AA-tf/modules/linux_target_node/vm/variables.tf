@@ -22,3 +22,7 @@ variable "workload_nickname" {
 variable "nic_id" {
   type = string
 }
+
+variable "current_gh_repo" {
+  type = string
+}

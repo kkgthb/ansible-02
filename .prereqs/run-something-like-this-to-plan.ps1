@@ -1,3 +1,9 @@
+$gh_cli_logged_in_user = (gh auth status --active --json 'hosts' --jq '.hosts."github.com"[0].login')
+$current_repo_owner = (gh repo view --json 'owner' --jq '.owner.login')
+If ($gh_cli_logged_in_user -ne $current_repo_owner) {
+    gh auth switch --user $current_repo_owner
+}
+
 Push-Location("$PsScriptRoot/AA-tf")
 
 terraform init

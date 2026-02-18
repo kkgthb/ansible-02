@@ -9,10 +9,18 @@ $write_ssh_key_here = [System.IO.Path]::GetFullPath([System.IO.Path]::Combine($a
 Write-Host("Config file should be: '$ansible_configuration_file'")
 Write-Host("Results should write to: '$ansible_configuration_file'")
 
+# Install PyWinRM Python package
+Write-Host('Installing Python package:')
+(python3 -m pip install --upgrade pip)
+(python3 -m pip install "pywinrm>=0.4.0" "requests")
+(python3 -m pip install --upgrade ansible)
+
 # Specify which Ansible configuration file to use
+Write-Host('Specifying Ansible configuration file:')
 [System.Environment]::SetEnvironmentVariable('ANSIBLE_CONFIG', $ansible_configuration_file, 'Process')
 
 # Manually configure JUnit output path since Ansible configuration file not working
+Write-Host('Configuring JUnit output path:')
 New-Item -Path $write_results_here -Type 'Directory' -Force | Out-Null
 [System.Environment]::SetEnvironmentVariable('JUNIT_OUTPUT_DIR', $write_results_here, 'Process')
 
@@ -41,9 +49,9 @@ Catch {
 # Chmod that file to something Ansible won't reject; by default it starts as 644.
 chmod 600 $write_ssh_key_here
 
-# Run Ansible
+# Run Ansible.
 Write-Host('Running the main Ansible playbook file:')
-ansible-playbook $ansible_playbook_main_file -v
+ansible-playbook $ansible_playbook_main_file
 
 # Delete the file that contained the SSH key
 Write-Host('Deleting SSH key file:')

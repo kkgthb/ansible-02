@@ -1,0 +1,1 @@
+Fascinating tidbit:  Ansible likes to warn you if a target "managed node" doesn't have `python3` installed.  Haven't yet figured out if that ever actually matters.

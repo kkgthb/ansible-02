@@ -5,6 +5,7 @@ on:
     branches:
       - main
       - temp
+  workflow_dispatch:
 
 jobs:
   job_1:
@@ -23,6 +24,9 @@ jobs:
           THE_LINUX_VM_FQDN: ${{ secrets.THE_LINUX_VM_FQDN }}
           THE_LINUX_VM_USERNAME: ${{ secrets.THE_LINUX_VM_USERNAME }}
           THE_LINUX_VM_SSH_PRIVATE_KEY_VALUE: ${{ secrets.THE_LINUX_VM_SSH_PRIVATE_KEY_VALUE }}
+          THE_WINDOWS_VM_FQDN: ${{ secrets.THE_WINDOWS_VM_FQDN }}
+          THE_WINDOWS_VM_USERNAME: ${{ secrets.THE_WINDOWS_VM_USERNAME }}
+          THE_WINDOWS_VM_PASSWORD: ${{ secrets.THE_WINDOWS_VM_PASSWORD }}
       - id: "beautify_ansible_results"
         name: "Beautify the Ansible execution results"
         uses: "mikepenz/action-junit-report@v5"

@@ -11,6 +11,37 @@ Describe "Validate Linux VM is up and loginnable as me" {
     }
 }
 
+Describe "Validate Linux VM is up and loginnable over SSH via admin username and password" {
+    # Once logged in, `uname --kernel-name` should equal `Linux`
+    BeforeAll {
+        $tfstate_file = [System.IO.Path]::GetFullPath([System.IO.Path]::Combine($PSScriptRoot, 'AA-tf', 'terraform.tfstate'))
+        $lnx_vm_fqdn = (jq -r '.resources[] | select(.type=="github_actions_secret") | .instances[] | select(.attributes.secret_name=="THE_LINUX_VM_FQDN") | .attributes.plaintext_value' $tfstate_file)
+        $lnx_vm_admin_username = (jq -r '.resources[] | select(.type=="github_actions_secret") | .instances[] | select(.attributes.secret_name=="THE_LINUX_VM_USERNAME") | .attributes.plaintext_value' $tfstate_file)
+        $lnx_vm_admin_ssh_private_key_value = (
+            jq `
+                -r '.resources[] | select(.type=="github_actions_secret") | .instances[] | select(.attributes.secret_name=="THE_LINUX_VM_SSH_PRIVATE_KEY_VALUE") | .attributes.plaintext_value' `
+                --binary `
+                $tfstate_file
+        )
+        $temp_private_key_path = [System.IO.Path]::GetFullPath([System.IO.Path]::Combine([System.Environment]::GetFolderPath([System.Environment+SpecialFolder]::UserProfile), '.ssh', 'temp_ssh_key.pem'))
+        $lnx_vm_admin_ssh_private_key_value | Set-Content -Path $temp_private_key_path
+        $ssh_command = "ssh -i `"$temp_private_key_path`" -o StrictHostKeyChecking=no $lnx_vm_admin_username@$lnx_vm_fqdn uname --kernel-name"
+    }
+    It "should return correct remote kernel name" {
+        $remote_kernel_name = Invoke-Expression $ssh_command
+        $remote_kernel_name | Should -Not -BeNullOrEmpty
+        $remote_kernel_name | Should -Be 'Linux'
+    }
+    AfterAll {
+        Remove-Item -Path $temp_private_key_path -Force
+        $ssh_command = $null
+        $lnx_vm_fqdn = $null
+        $lnx_vm_admin_username = $null
+        $lnx_vm_admin_ssh_private_key_value = $null
+        $tfstate_file = $null
+    }
+}
+
 Describe "Validate Windows VM is up and loginnable as me" {
     # Once logged in, `(Get-ComputerInfo).OsManufacturer` should equal `Microsoft Corporation`
     It "should return correct remote OS manufacturer" {
@@ -46,7 +77,7 @@ Describe "Validate Windows VM is up and loginnable over WinRM via admin username
         $win_vm_admin_username = $null
         $win_vm_admin_password = $null
         $win_vm_admin_password_ss = $null
-        $tfstate = $null
+        $tfstate_file = $null
     }
     It "should return correct remote OS manufacturer" {
         $remote_kernel_os_manufacturer = Invoke-Command `

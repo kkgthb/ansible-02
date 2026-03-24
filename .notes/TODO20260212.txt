@@ -1,0 +1,8 @@
+# Found .gitignore'd 3/24/26.  Moving into repo; no idea if I did it, didn't need it, etc.
+# I vaguely remember feeling like my work here has been done for a while, but I hate to throw out three good bookmarks!
+
+https://docs.ansible.com/projects/ansible/latest/vault_guide/index.html
+https://docs.ansible.com/projects/ansible/latest/vault_guide/index.html#storing-passwords-in-third-party-tools-with-vault-password-client-scripts
+https://docs.ansible.com/projects/ansible/latest/reference_appendices/logging.html#protecting-sensitive-data-with-no-log
+
+Maybe I can give my Linux VM a simple password with something write-only during TF run?  Or pull from an env?

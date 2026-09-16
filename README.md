@@ -5,7 +5,7 @@ This repository contains a small demonstration of Ansible code.
 The [.cicd_pipeline_helpers/i_only_run_on_posix_not_windows.ps1](.cicd_pipeline_helpers/i_only_run_on_posix_not_windows.ps1) PowerShell script runs one Ansible **play**, which:
 
 1. Installs an external Ansible **collection** named `katiekodes.ansible_demo_first`, which I published in my `ansible-01` repo, just to show off how importing works.
-2. Runs [`ansible_demo_02/playbooks/main.yml](ansible_demo_02/playbooks/main.yml) Ansible **playbook** against the following three Ansible inventory **hosts**:
+2. Runs [ansible_demo_02/playbooks/main.yml](ansible_demo_02/playbooks/main.yml) Ansible **playbook** against the following three Ansible inventory **hosts**:
     * The machine on which the PowerShell script itself is running _(local)_.
     * A remote Linux Azure VM.
         * _(Presuming it's been provisioned first with appropriate `.prereqs/*.ps1` scripts.)_
